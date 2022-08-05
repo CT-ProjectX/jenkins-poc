@@ -1,0 +1,26 @@
+pipeline {
+    
+    agent any
+
+    stages {
+        stage('Build java') {
+            steps {
+                echo 'Building..'
+                checkout scm
+             
+            }
+        }
+        stage('Build Dockerfile') {
+            steps {
+                def customImage = docker.build("poc-aaa:${env.BUILD_ID}")
+                customImage.push()
+                customImage.push('latest')
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+    }
+}   
